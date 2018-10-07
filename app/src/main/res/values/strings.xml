@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">BusTracker</string>
+    <string name="title_activity_display">Map</string>
+</resources>
