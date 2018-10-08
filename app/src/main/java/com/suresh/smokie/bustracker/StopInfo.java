@@ -1,5 +1,8 @@
 package com.suresh.smokie.bustracker;
 
+
+import com.google.android.gms.maps.model.LatLng;
+
 public class StopInfo {
     private String name,longitude,latitude;
 
@@ -35,5 +38,10 @@ public class StopInfo {
 
     public void setLatitude(String latitude) {
         this.latitude = latitude;
+    }
+
+    public LatLng getLatLngObject() {
+        LatLng latLng = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude));
+        return latLng;
     }
 }
