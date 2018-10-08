@@ -30,10 +30,6 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".DisplayActivity"
-            android:label="@string/title_activity_display">
-        </activity>
-        <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar">

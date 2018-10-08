@@ -55,6 +55,9 @@ public class MainActivity extends AppCompatActivity
     GoogleMap mMap;
     Marker mMarker;
     String mDuration;
+    LatLng mBusLocation;
+    String mBusNumber = "bus_11";
+    List<Marker> mAddedBusStops;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +65,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        mAddedBusStops = new ArrayList<>();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -122,20 +126,16 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
-//        if (id == R.id.nav_camera) {
-//            // Handle the camera action
-//        } else if (id == R.id.nav_gallery) {
-//
-//        } else if (id == R.id.nav_slideshow) {
-//
-//        } else if (id == R.id.nav_manage) {
-//
-//        } else if (id == R.id.nav_share) {
-//
-//        } else if (id == R.id.nav_send) {
-//
-//        }
+        if(id == R.id.slider_bus_9) {
+            mBusNumber = "bus_9";
+            removeMarkers();
+            onMapReady(mMap);
+        }
+        if(id == R.id.slider_bus_11) {
+            mBusNumber = "bus_11";
+            removeMarkers();
+            onMapReady(mMap);
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -157,14 +157,14 @@ public class MainActivity extends AppCompatActivity
                     String name = document.getString("name");
                     double lat = document.getDouble("latitude");
                     double lng = document.getDouble("longitude");
-                    LatLng location = new LatLng(lat, lng);
+                    mBusLocation = new LatLng(lat, lng);
                     if(mMarker == null) {
                         MarkerOptions markerOptions = new MarkerOptions();
-                        markerOptions.position(location).icon(BitmapDescriptorFactory.fromResource(R.drawable.bus_32)).title(name);
+                        markerOptions.position(mBusLocation).icon(BitmapDescriptorFactory.fromResource(R.drawable.bus_32)).title(name);
                         mMarker = googleMap.addMarker(markerOptions);
-                        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 14.0f));
+                        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mBusLocation, 14.0f));
                     } else {
-                        mMarker.setPosition(location);
+                        mMarker.setPosition(mBusLocation);
                     }
 
                     Log.d("MainActivity.class", "Current data: " + document.getData());
@@ -182,6 +182,7 @@ public class MainActivity extends AppCompatActivity
 
 
         busRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            List<LatLng> waypoints = new ArrayList<>();
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if(task.isSuccessful()) {
@@ -189,16 +190,18 @@ public class MainActivity extends AppCompatActivity
                         StopInfo stopInfo = document.toObject(StopInfo.class);
                         stopInfos.add(stopInfo);
                         LatLng location = stopInfo.getLatLngObject();
+                        waypoints.add(location);
                         MarkerOptions markerOptions = new MarkerOptions();
                         markerOptions.position(location).icon(BitmapDescriptorFactory.fromResource(R.drawable.bus_stop_32)).title(stopInfo.getName());
-                        googleMap.addMarker(markerOptions);
+                        Marker busStop = googleMap.addMarker(markerOptions);
+                        mAddedBusStops.add(busStop);
                         Log.e("MainActivity.class", document.getId() + " => " + document.getData());
                     }
-                    LatLng origin = stopInfos.get(0).getLatLngObject();
-                    LatLng dest = stopInfos.get(1).getLatLngObject();
+                    LatLng origin = mBusLocation;
+                    LatLng dest = stopInfos.get(stopInfos.size()-1).getLatLngObject();
 
                     //Getting URL to the Google Directions API
-                    String url = Utils.getDirectionsUrl(origin, dest);
+                    String url = Utils.getDirectionsUrl(origin, dest, waypoints);
 
                     DownloadTask downloadTask = new DownloadTask();
 
@@ -243,7 +246,6 @@ public class MainActivity extends AppCompatActivity
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            mDuration = Utils.getDuration(result);
             Log.e("MainActivity.class", "Duration: " + mDuration);
             Log.e("DisplayActivyt.class", result);
             ParserTask parserTask = new ParserTask();
@@ -308,10 +310,17 @@ public class MainActivity extends AppCompatActivity
             }
         }
     }
+
+    private void removeMarkers() {
+        for(int i = 0; i<mAddedBusStops.size(); i++) {
+            mAddedBusStops.get(i).remove();
+        }
+    }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        setStopsMarker(googleMap, "bus_11");
-        setBusMarker(googleMap, "bus_11");
+        setStopsMarker(googleMap, mBusNumber);
+        setBusMarker(googleMap, mBusNumber);
     }
 }

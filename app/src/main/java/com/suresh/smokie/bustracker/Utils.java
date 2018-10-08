@@ -14,13 +14,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 
 public class Utils {
 
-    public static String getDirectionsUrl(LatLng origin, LatLng dest) {
+    public static String getDirectionsUrl(LatLng origin, LatLng dest, List<LatLng> waypoints) {
 
         //api key
-        String str_key = "key=" + "AIzaSyBlKZq8cm6J6bipiABm9Vl51GS5HFuL8CM";
+        String str_key = "key=" + "AIzaSyDckbZX8R6eHFgeTAF2YA2hmXjqZT3b6J0";
 
         // Origin of route
         String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
@@ -28,12 +29,18 @@ public class Utils {
         // Destination of route
         String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
 
+        String str_waypoints = "waypoints=";
+        for(int i = 0; i<waypoints.size()-1; i++) {
+            str_waypoints += "via:" + waypoints.get(i).latitude + "," + waypoints.get(i).longitude + "|";
+        }
+        str_waypoints += "via:" + waypoints.get(waypoints.size()-1).latitude + "," + waypoints.get(waypoints.size()-1).longitude;
+
         // Sensor enabled
         String sensor = "sensor=false";
         String mode = "mode=driving";
 
         // Building the parameters to the web service
-        String parameters = str_origin + "&" + str_dest + "&" + sensor + "&" + mode + "&" + str_key;
+        String parameters = str_origin + "&" + str_dest + "&" + sensor + "&" + mode + "&" + str_key + "&" + str_waypoints;
 
         // Output format
         String output = "json";
@@ -43,19 +50,6 @@ public class Utils {
 
 
         return url;
-    }
-    public static String getDuration(String response) {
-
-        String duration = null;
-        try {
-            JSONObject jsonObject = new JSONObject(response); // parse response into json object
-            JSONArray routeArray = jsonObject.getJSONArray("route"); // pull out the "route" object
-            JSONObject durationObject = jsonObject.getJSONObject("duration"); // pull out the "duration" object
-            duration = durationObject.getString("text");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return duration;
     }
 
     public static String downloadUrl(String strUrl) throws IOException {
