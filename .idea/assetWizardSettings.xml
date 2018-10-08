@@ -89,8 +89,8 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="ic_bus" />
-                            <entry key="sourceFile" value="C:\Users\rahul\Downloads\bus-stop.svg" />
+                            <entry key="outputName" value="ic_baseline_info" />
+                            <entry key="sourceFile" value="D:\Android-App-Development\baseline-info-24px.svg" />
                           </map>
                         </option>
                       </PersistentState>
