@@ -12,6 +12,10 @@
             android:id="@+id/slider_bus_11"
             android:icon="@drawable/ic_menu_bus"
             android:title="@string/bus_11" />
+        <item
+            android:id="@+id/slider_bus_12"
+            android:icon="@drawable/ic_menu_bus"
+            android:title="@string/bus_12" />
     </group>
 
 </menu>

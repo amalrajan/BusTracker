@@ -21,7 +21,7 @@ public class Utils {
     public static String getDirectionsUrl(LatLng origin, LatLng dest, List<LatLng> waypoints) {
 
         //api key
-        String str_key = "key=" + "AIzaSyDckbZX8R6eHFgeTAF2YA2hmXjqZT3b6J0";
+        String str_key = "key=" + "AIzaSyBfjk2wdwv_qBn1Gfw2AoL2-J5-Azyh5fs";
 
         // Origin of route
         String str_origin = "origin=" + origin.latitude + "," + origin.longitude;

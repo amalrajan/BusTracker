@@ -17,6 +17,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity
     Marker mMarker;
     String mDuration;
     LatLng mBusLocation;
+    Polyline mPolyLine;
     String mBusNumber = "bus_11";
     List<Marker> mAddedBusStops;
 
@@ -128,11 +130,20 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
         if(id == R.id.slider_bus_9) {
             mBusNumber = "bus_9";
+            mPolyLine.remove();
             removeMarkers();
+
             onMapReady(mMap);
         }
         if(id == R.id.slider_bus_11) {
             mBusNumber = "bus_11";
+            mPolyLine.remove();
+            removeMarkers();
+            onMapReady(mMap);
+        }
+        if(id == R.id.slider_bus_12) {
+            mBusNumber = "bus_12";
+            mPolyLine.remove();
             removeMarkers();
             onMapReady(mMap);
         }
@@ -306,7 +317,7 @@ public class MainActivity extends AppCompatActivity
 
             // Drawing polyline in the Google Map for the i-th route
             if(lineOptions != null) {
-                mMap.addPolyline(lineOptions);
+                mPolyLine = mMap.addPolyline(lineOptions);
             }
         }
     }
