@@ -1,16 +1,20 @@
 package com.suresh.smokie.bustracker;
 
+
+import com.google.android.gms.maps.model.LatLng;
+
 public class StopInfo {
-    private String name,longitude,latitude;
+    private String name;
+    String lon,lat;
 
     public StopInfo() {
 
     }
 
-    public StopInfo(String name, String longitude, String latitude) {
+    public StopInfo(String name, String lon, String lat) {
         this.name = name;
-        this.longitude = longitude;
-        this.latitude = latitude;
+        this.lon = lon;
+        this.lat = lat;
     }
 
     public String getName() {
@@ -21,19 +25,24 @@ public class StopInfo {
         this.name = name;
     }
 
-    public String getLongitude() {
-        return longitude;
+    public String getlon() {
+        return lon;
     }
 
-    public void setLongitude(String longitude) {
-        this.longitude = longitude;
+    public void setlon(String lon) {
+        this.lon = lon;
     }
 
-    public String getLatitude() {
-        return latitude;
+    public String getlat() {
+        return lat;
     }
 
-    public void setLatitude(String latitude) {
-        this.latitude = latitude;
+    public void setlat(String lat) {
+        this.lat = lat;
+    }
+
+    public LatLng getLatLngObject() {
+        LatLng latLng = new LatLng(Double.parseDouble(lat),Double.parseDouble(lon));
+        return latLng;
     }
 }
